@@ -17,14 +17,21 @@ function random(min, max) {
 function randomRGB() {
   return `rgb(${random(0, 255)},${random(0, 255)},${random(0, 255)})`;
 }
-
 class Shape {
-  constructor(x, y, velX, velY, exists) {
+  constructor(x, y, velX, velY) {
     this.x = x;
     this.y = y;
     this.velX = velX;
     this.velY = velY;
-    this.exists = exists;
+  }
+}
+class Ball extends Shape {
+  constructor(x, y, velX, velY, exists, color, size) {
+    super(x, y, velX, velY);
+
+    this.color = color;
+    this.size = size;
+    this.exists = true;
   }
 
   draw() {
@@ -69,11 +76,20 @@ class Shape {
     }
   }
 }
-class Ball extends Shape {
-  constructor(x, y, velX, velY, exists, color, size) {
-    super(x, y, velX, velY, exists);
-    this.color = color;
-    this.size = size;
+
+class EvilCircle extends Shape {
+  constructor(x, y) {
+    super(x, y, 20, 20);
+
+    this.color = "white";
+    this.size = 10;
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.strokeStyle = this.color;
+    ctx.lineWidth = 3;
+    ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
+    ctx.stroke();
   }
 }
 
@@ -95,7 +111,7 @@ while (balls.length < 25) {
 
   balls.push(ball);
 }
-
+const evilBall = new EvilCircle(random(0, width), random(0, height));
 function loop() {
   ctx.fillStyle = "rgba(0, 0, 0, 0.25)";
   ctx.fillRect(0, 0, width, height);
@@ -106,6 +122,9 @@ function loop() {
     ball.collisionDetect();
   }
 
+  evilBall.draw();
+  // evilBall.checkBounds();
+  // evilBall.collisionDetect();
   requestAnimationFrame(loop);
 }
 
