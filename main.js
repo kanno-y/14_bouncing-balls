@@ -26,7 +26,7 @@ class Shape {
   }
 }
 class Ball extends Shape {
-  constructor(x, y, velX, velY, exists, color, size) {
+  constructor(x, y, velX, velY, exits, color, size) {
     super(x, y, velX, velY);
 
     this.color = color;
@@ -90,6 +90,26 @@ class EvilCircle extends Shape {
     ctx.lineWidth = 3;
     ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
     ctx.stroke();
+  }
+  checkBounds() {
+    if (this.x + this.size >= width) {
+      this.velX = -this.velX;
+    }
+
+    if (this.x - this.size <= 0) {
+      this.velX = -this.velX;
+    }
+
+    if (this.y + this.size >= height) {
+      this.velY = -this.velY;
+    }
+
+    if (this.y - this.size <= 0) {
+      this.velY = -this.velY;
+    }
+
+    // this.x += this.velX;
+    // this.y += this.velY;
   }
 }
 
