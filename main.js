@@ -111,6 +111,37 @@ class EvilCircle extends Shape {
     // this.x += this.velX;
     // this.y += this.velY;
   }
+  setControls() {
+    let _this = this;
+    window.onkeydown = function (e) {
+      if (e.key === "a") {
+        console.log("a");
+        _this.x -= _this.velX;
+      } else if (e.key === "d") {
+        console.log("d");
+        _this.x += _this.velX;
+      } else if (e.key === "w") {
+        console.log("w");
+        _this.y -= _this.velY;
+      } else if (e.key === "s") {
+        console.log("s");
+        _this.y += _this.velY;
+      }
+    };
+  }
+  collisionDetect() {
+    for (const ball of balls) {
+      if (ball.exists === true) {
+        const dx = this.x - ball.x;
+        const dy = this.y - ball.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance < this.size + ball.size) {
+          ball.exists = false;
+        }
+      }
+    }
+  }
 }
 
 const balls = [];
@@ -132,19 +163,24 @@ while (balls.length < 25) {
   balls.push(ball);
 }
 const evilBall = new EvilCircle(random(0, width), random(0, height));
+evilBall.setControls();
+
 function loop() {
   ctx.fillStyle = "rgba(0, 0, 0, 0.25)";
   ctx.fillRect(0, 0, width, height);
 
   for (const ball of balls) {
-    ball.draw();
-    ball.update();
-    ball.collisionDetect();
+    if (ball.exists === true) {
+      ball.draw();
+      ball.update();
+      ball.collisionDetect();
+    } else {
+    }
+    evilBall.draw();
+    evilBall.checkBounds();
+    evilBall.collisionDetect();
   }
 
-  evilBall.draw();
-  // evilBall.checkBounds();
-  // evilBall.collisionDetect();
   requestAnimationFrame(loop);
 }
 
